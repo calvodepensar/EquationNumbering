@@ -1,0 +1,9 @@
+{
+        "@metadata": {
+                "authors": [
+                        "Daniel Gracia Garallar",
+                        "glossaLAB Team"
+                ]
+        },
+        "equationnumbering-desc": "Adds the <code>#autoeq</code> and <code>#refeq</code> parser functions to enable automatic numbering of mathematical expressions, ressembling the LaTeX/amsmath <code>{equation}</code> environment"
+}

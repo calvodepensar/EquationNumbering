@@ -1,0 +1,29 @@
+{                                                                                                                           "name": "EquationNumbering",
+        "version": "1.0",
+        "author": [
+                "Daniel Gracia Garallar",
+                "glossaLAB Team"
+        ],
+        "url": "https://www.mediawiki.org/wiki/Extension:EquationNumbering",
+        "descriptionmsg": "equationnumbering-desc",
+        "license-name": "MIT",
+        "type": "parserhook",
+        "requires": {
+                "MediaWiki": ">= 1.39.0"                                                                                    },
+        "MessagesDirs": {
+                "EquationNumbering": [
+                        "i18n"
+                ]
+        },
+        "ExtensionMessagesFiles": {
+                "EquationNumberingMagic": "EquationNumbering.i18n.magic.php"
+        },
+        "AutoloadClasses": {
+                "EquationNumbering": "includes/EquationNumbering.php"
+        },
+        "Hooks": {
+                "ParserFirstCallInit": "EquationNumbering::onParserFirstCallInit",
+                "ParserClearState": "EquationNumbering::onParserClearState:"
+        },
+        "manifest_version": 2
+}
