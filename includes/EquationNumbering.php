@@ -1,7 +1,7 @@
 <?php
 /*
  *  EquationNumbering
- *  Adds a magic
+ *  Adds two new parser functions to enable sequential numeration of mathematical expressions
  *
  * @file
  * @author Daniel Gracia Garallar
@@ -10,7 +10,7 @@
 class EquationNumbering {
 
     /**
-     * Registers our parser functions with the parser.
+     * Registers our parser functions.
      * @param Parser $parser
      */
     public static function onParserFirstCallInit( Parser $parser ) {
@@ -28,7 +28,7 @@ class EquationNumbering {
     }
 
     /**
-     * Renders the auto-numbered equation. {{#autoeq: <math>expression</math> | label }}
+     * Renders the auto-numbered equation, e.g. {{#autoeq: <math>myexpression</math> | mylabel }}
      *
      * @param Parser $parser
      * @param \PPFrame $frame The frame object for template processing.
@@ -73,7 +73,7 @@ class EquationNumbering {
     }
 
     /**
-     * Renders a reference to an equation. {{#refeq: label }}
+     * Renders a reference to an equation. {{#refeq: mylabel }}
      *
      * @param Parser $parser
      * @param \PPFrame $frame The frame object for template processing.
@@ -84,7 +84,6 @@ class EquationNumbering {
         $label = isset( $args[0] ) ? trim( $frame->expand( $args[0] ) ) : '';
         $output = '';
 
-        // Check if the labels array exists and the specific label is set
         if ( $label !== '' && isset( $parser->mEquationNumberingLabels ) && isset( $parser->mEquationNumberingLabels[$label] ) ) {
             $data = $parser->mEquationNumberingLabels[$label];
             $id = htmlspecialchars( $data['id'] );
