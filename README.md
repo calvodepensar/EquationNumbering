@@ -45,6 +45,7 @@ For example, the following code, added to `MediaWiki:Commons.css`, would cause t
 ```css
 .equation-container {
 	display: flex;
+	align-items: center;
 }
 
 .equation-expr{
