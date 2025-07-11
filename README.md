@@ -16,7 +16,7 @@
 4. *Check version*. Navigate to the `Special:Version` page on your wiki; you should see `EquationNumbering` listed under `Installed extensions`, and `autoeq` and `ref_equation` under `Parser function hooks`.
 
 ## Usage
-The extension provides two new parser functions: `{{#autoeq:<expr>|<label}}` and `{{#ref_equation:<label>}}`.
+The extension provides two new parser functions: `{{#autoeq:<expr>|<label}}` and `{{#refeq:<label>}}`.
 
 ### Numbering an Equation
 Use `autoeq` to display and number an equation, for example:
