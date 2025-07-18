@@ -52,14 +52,12 @@ class EquationNumbering {
 
         $parsedExpression = $parser->recursiveTagParse( $expressionWikitext, $frame );
 
-        // If the label is empty, create a default one. This is the key change.
         $lookupLabel = $label;
         if ( $lookupLabel === '' ) {
             $lookupLabel = 'eqnum-' . $currentCount;
         }
     
         // Sanitize the label for use as a valid HTML id.
-        // We sanitize the lookupLabel to ensure the ID is always valid.
         $sanitizedId = preg_replace( '/[^a-zA-Z0-9\-_:.]/', '_', $lookupLabel );
     
         // Always store the label information.
