@@ -52,15 +52,21 @@ class EquationNumbering {
 
         $parsedExpression = $parser->recursiveTagParse( $expressionWikitext, $frame );
 
-        // Sanitize the label for use as a valid HTML id
-        $sanitizedId = 'eqnum-' . $currentCount; // A default ID if no label is provided
-        if ( $label !== '' ) {
-            $sanitizedId = preg_replace( '/[^a-zA-Z0-9\-_:.]/', '_', $label );
-            $parser->mEquationNumberingLabels[$label] = [
-                'count' => $currentCount,
-                'id' => $sanitizedId
-                            ];
+        // If the label is empty, create a default one. This is the key change.
+        $lookupLabel = $label;
+        if ( $lookupLabel === '' ) {
+            $lookupLabel = 'eqnum-' . $currentCount;
         }
+    
+        // Sanitize the label for use as a valid HTML id.
+        // We sanitize the lookupLabel to ensure the ID is always valid.
+        $sanitizedId = preg_replace( '/[^a-zA-Z0-9\-_:.]/', '_', $lookupLabel );
+    
+        // Always store the label information.
+        $parser->mEquationNumberingLabels[$lookupLabel] = [
+            'count' => $currentCount,
+            'id' => $sanitizedId
+        ];
 
         // Assemble the final HTML output
         $output = '<div class="equation-container" id="' . htmlspecialchars( $sanitizedId ) . '">';
