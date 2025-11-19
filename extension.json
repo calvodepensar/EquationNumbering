@@ -21,9 +21,22 @@
         "AutoloadClasses": {
                 "EquationNumbering": "includes/EquationNumbering.php"
         },
-        "Hooks": {
-                "ParserFirstCallInit": "EquationNumbering::onParserFirstCallInit",
-                "ParserClearState": "EquationNumbering::onParserClearState:"
+        "HookHandlers": {
+                "default": {
+                        "class": "EquationNumbering",
+                        "service": "EquationNumbering"
+                }
         },
-        "manifest_version": 2
+        "Hooks": {
+                "ParserFirstCallInit": [
+                        "EquationNumbering"
+                ],
+                "ParserClearState": [
+                        "EquationNumbering"
+                ]
+        },
+        "manifest_version": 2,
+        "ServiceWiring": {
+                "EquationNumbering": "EquationNumbering"
+        }
 }

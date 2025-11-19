@@ -13,18 +13,18 @@ class EquationNumbering {
      * Registers our parser functions.
      * @param Parser $parser
      */
-    public static function onParserFirstCallInit( Parser $parser ) {
-        $parser->setFunctionHook( 'autoeq', [ self::class, 'renderAutoNumEquation' ], Parser::SFH_OBJECT_ARGS );
-        $parser->setFunctionHook( 'refeq', [ self::class, 'renderRefEquation' ], Parser::SFH_OBJECT_ARGS );
+    public function onParserFirstCallInit( Parser $parser ) {
+        $parser->setFunctionHook( 'autoeq', [ $this, 'renderAutoNumEquation' ], Parser::SFH_OBJECT_ARGS );
+        $parser->setFunctionHook( 'refeq', [ $this, 'renderRefEquation' ], Parser::SFH_OBJECT_ARGS );
     }
 
     /**
      * Clears our extension's state data from the parser.
      * @param Parser $parser
      */
-    public static function onParserClearState( Parser $parser ) {
-        unset( $parser->mEquationNumberingCounter );
-        unset( $parser->mEquationNumberingLabels );
+    public function onParserClearState( Parser $parser ) {
+        $parser->setVariable( 'EquationNumberingCounter', 0 );
+        $parser->setVariable( 'EquationNumberingLabels', [] );
     }
 
     /**
@@ -35,20 +35,17 @@ class EquationNumbering {
      * @param array $args The arguments passed to the parser function.
      * @return array
      */
-    public static function renderAutoNumEquation( Parser $parser, \PPFrame $frame, array $args ) {
-        // Initialize counter and labels on the parser object if they don't exist
-        if ( !isset( $parser->mEquationNumberingCounter ) ) {
-            $parser->mEquationNumberingCounter = 0;
-            $parser->mEquationNumberingLabels = [];
-        }
+    public function renderAutoNumEquation( Parser $parser, \PPFrame $frame, array $args ) {
+        $counter = $parser->getVariable( 'EquationNumberingCounter', 0 );
+        $labels = $parser->getVariable( 'EquationNumberingLabels', [] );
 
         // Get the full wikitext of the expression and the label
         $expressionWikitext = isset( $args[0] ) ? trim( $frame->expand( $args[0] ) ) : '';
         $label = isset( $args[1] ) ? trim( $frame->expand( $args[1] ) ) : '';
 
         // Increment the equation counter for the current page
-        $parser->mEquationNumberingCounter++;
-        $currentCount = $parser->mEquationNumberingCounter;
+        $counter++;
+        $currentCount = $counter;
 
         $parsedExpression = $parser->recursiveTagParse( $expressionWikitext, $frame );
 
@@ -61,10 +58,13 @@ class EquationNumbering {
         $sanitizedId = preg_replace( '/[^a-zA-Z0-9\-_:.]/', '_', $lookupLabel );
     
         // Always store the label information.
-        $parser->mEquationNumberingLabels[$lookupLabel] = [
+        $labels[$lookupLabel] = [
             'count' => $currentCount,
             'id' => $sanitizedId
         ];
+
+        $parser->setVariable( 'EquationNumberingCounter', $counter );
+        $parser->setVariable( 'EquationNumberingLabels', $labels );
 
         // Assemble the final HTML output
         $output = '<div class="equation-container" id="' . htmlspecialchars( $sanitizedId ) . '">';
@@ -84,12 +84,13 @@ class EquationNumbering {
      * @param array $args The arguments passed to the parser function.
      * @return array
      */
-    public static function renderRefEquation( Parser $parser, \PPFrame $frame, array $args ) {
+    public function renderRefEquation( Parser $parser, \PPFrame $frame, array $args ) {
         $label = isset( $args[0] ) ? trim( $frame->expand( $args[0] ) ) : '';
         $output = '';
+        $labels = $parser->getVariable( 'EquationNumberingLabels' );
 
-        if ( $label !== '' && isset( $parser->mEquationNumberingLabels ) && isset( $parser->mEquationNumberingLabels[$label] ) ) {
-            $data = $parser->mEquationNumberingLabels[$label];
+        if ( $label !== '' && $labels !== false && isset( $labels[$label] ) ) {
+            $data = $labels[$label];
             $id = htmlspecialchars( $data['id'] );
             $count = htmlspecialchars( $data['count'] ); // It's an int, but sanitize for safety
 
