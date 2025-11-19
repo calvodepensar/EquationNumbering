@@ -1,29 +1,47 @@
-{                                                                                                                           "name": "EquationNumbering",
-        "version": "1.0",
-        "author": [
-                "Daniel Gracia Garallar",
-                "glossaLAB Team"
-        ],
-        "url": "https://www.mediawiki.org/wiki/Extension:EquationNumbering",
-        "descriptionmsg": "equationnumbering-desc",
-        "license-name": "MIT",
-        "type": "parserhook",
-        "requires": {
-                "MediaWiki": ">= 1.39.0"                                                                                    },
-        "MessagesDirs": {
-                "EquationNumbering": [
-                        "i18n"
-                ]
-        },
-        "ExtensionMessagesFiles": {
-                "EquationNumberingMagic": "EquationNumbering.i18n.magic.php"
-        },
-        "AutoloadClasses": {
-                "EquationNumbering": "includes/EquationNumbering.php"
-        },
-        "Hooks": {
-                "ParserFirstCallInit": "EquationNumbering::onParserFirstCallInit",
-                "ParserClearState": "EquationNumbering::onParserClearState:"
-        },
-        "manifest_version": 2
+{
+    "name": "EquationNumbering",
+    "version": "2.0.0",
+    "author": [
+        "Daniel Gracia Garallar",
+        "glossaLAB Team"
+    ],
+    "url": "https://www.mediawiki.org/wiki/Extension:EquationNumbering",
+    "descriptionmsg": "equationnumbering-desc",
+    "license-name": "MIT",
+    "type": "parserhook",
+    "requires": {
+        "MediaWiki": ">= 1.43.0"
+    },
+    "MessagesDirs": {
+        "EquationNumbering": [
+            "i18n"
+        ]
+    },
+    "AutoloadNamespaces": {
+        "MediaWiki\\Extension\\EquationNumbering\\": "src/"
+    },
+    "MagicWords": {
+		"en": {
+			"autoeq": [ 0, "autoeq" ],
+			"refeq": [ 0, "refeq" ]
+		}
+	},
+    "ServiceWiring": {
+		"EquationNumbering": {
+			"class": "MediaWiki\\Extension\\EquationNumbering\\EquationNumbering"
+		}
+	},
+    "HookHandlers": {
+		"EquationNumbering": {
+			"class": "MediaWiki\\Extension\\EquationNumbering\\HookHandler",
+			"services": [
+				"EquationNumbering"
+			]
+		}
+	},
+    "Hooks": {
+        "ParserFirstCallInit": "EquationNumbering",
+        "ParserClearState": "EquationNumbering"
+    },
+    "manifest_version": 2
 }
